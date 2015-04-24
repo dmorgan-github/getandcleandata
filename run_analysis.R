@@ -4,17 +4,15 @@ library(dplyr)
 clean_name <- function(c) {
   col_name = c
   col_name = gsub("-", "", col_name)
-  col_name = gsub("\\(\\)", "", col_name)
-  col_name = gsub("std", "Std", col_name)
-  col_name = gsub("mean", "Mean", col_name)
+  col_name = sub("\\(\\)", "", col_name)
   if ( substr(col_name, 1,1) == "f") {
-    col_name = paste("Freq", substr(col_name, 2, nchar(col_name)), sep="")
+    col_name = paste("freq", substr(col_name, 2, nchar(col_name)), sep="")
   } else {
     if (substr(col_name, 1,1) == "t") {
-      col_name = paste("Time", substr(col_name, 2, nchar(col_name)), sep="") 
+      col_name = paste("time", substr(col_name, 2, nchar(col_name)), sep="") 
     }
   }
-  return(col_name)
+  return(tolower(col_name))
 }
 
 # activity labels
@@ -63,5 +61,4 @@ levels(x$activity) <- activity_labels
 # prepare the result dataset
 grp = group_by(x, subject, activity)
 result <- summarise_each(grp, funs(mean))
-
 
